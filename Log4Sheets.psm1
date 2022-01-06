@@ -36,7 +36,7 @@ function Set-Log-Endpoint {
 
  .Example
    # Set the current logging endpoint
-   Set-Log-Endpoint https://example.org/example
+   Set-Log-Endpoint https://example.org/example?key=examplekey
 #>
 param(
     [string] $endpoint
@@ -62,12 +62,20 @@ function Log-To-Sheet {
 param(
     [string] $message
     )
-    $body = @{
-        key="Legitlogkey";
-        hostname = hostname;
-        message=$message
+    if(!$global:endpoint){
+        return "Must set an endpoint with Set-Log-Endpoint before logging."
     }
-    return (iwr -Body ($body |ConvertTo-JSON) -Method Post $global:endpoint).Content
+    $body = @{
+        hostname = hostname;
+        message=$message;
+    }
+    try {
+        $response = (iwr -Body ($body |ConvertTo-JSON) -Method Post $global:endpoint).Content;
+        $obj = $response | ConvertFrom-Json;
+        return $obj.message;
+    } catch{
+        return "Failed to communicate with logging endpoint.";
+    }
 }
 
 Set-Alias l2s Log-To-Sheet

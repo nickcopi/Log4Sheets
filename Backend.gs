@@ -2,7 +2,7 @@ const key = 'Legitlogkey'
 
 function doPost(e){
   const data = JSON.parse(e.postData.contents);
-  if(data.key !== key) return ContentService.createTextOutput(JSON.stringify({
+  if(e.parameter.key !== key) return ContentService.createTextOutput(JSON.stringify({
     success:false,
     message:"Unauthenticated"
   }));
