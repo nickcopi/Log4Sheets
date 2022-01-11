@@ -6,10 +6,17 @@ function doPost(e){
     success:false,
     message:"Unauthenticated"
   }));
+  if(!data.message){
+    return ContentService.createTextOutput(JSON.stringify({
+      success:false,
+      message:"Message must not be empty!"
+    }));
+  }
   const dateData = new Date();
   const date = dateData.toLocaleDateString();
   const time = dateData.toLocaleTimeString();
   writeMessage('Hostname',data.hostname);
+  writeMessage('Serial Number',data.serialNumber);
   writeMessage('Message',data.message);
   writeMessage('Date',date);
   writeMessage('Time',time);
