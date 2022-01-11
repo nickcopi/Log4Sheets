@@ -75,7 +75,7 @@ param(
     }
     $body = @{
         hostname = hostname;
-        serialNumber = getSerialNumber();
+        serialNumber = getSerialNumber;
         message=$message;
     }
     try {
