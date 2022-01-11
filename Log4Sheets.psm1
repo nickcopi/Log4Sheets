@@ -1,4 +1,12 @@
 $global:endpoint = $null
+function getSerialNumber(){
+    $serial = '';
+    try{
+    $serial = ((gwmi win32_bios | fl SerialNumber) | Out-String).Split(":")[1].Substring(1).Trim();
+    } catch{
+    }
+    return $serial;
+}
 
 function Get-Log-Endpoint {
 <#
@@ -57,7 +65,7 @@ function Log-To-Sheet {
 
  .Example
    # Log a message to a Google Sheet
-   Log-To-Sheet ""
+   Log-To-Sheet "Example log message."
 #>
 param(
     [string] $message
@@ -67,6 +75,7 @@ param(
     }
     $body = @{
         hostname = hostname;
+        serialNumber = getSerialNumber();
         message=$message;
     }
     try {
